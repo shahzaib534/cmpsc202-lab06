@@ -1,11 +1,10 @@
-"""Three simple ways to solve the coin-change problem."""
+"""Coin change functions and a simple timing comparison."""
 
 from math import inf
 from time import perf_counter
 
 
 def coin_change_recursive(coins, amount):
-    """Return the fewest coins needed, or -1 if change cannot be made."""
     if amount == 0:
         return 0
     if amount < 0:
@@ -19,7 +18,6 @@ def coin_change_recursive(coins, amount):
 
 
 def coin_change_memoized(coins, amount, memo=None):
-    """Use a dictionary so each amount is solved only once."""
     if memo is None:
         memo = {}
     if amount == 0:
@@ -38,7 +36,6 @@ def coin_change_memoized(coins, amount, memo=None):
 
 
 def coin_change_dp(coins, amount):
-    """Build answers from 0 up to amount."""
     dp = [inf] * (amount + 1)
     dp[0] = 0
     for current_amount in range(1, amount + 1):
@@ -49,15 +46,15 @@ def coin_change_dp(coins, amount):
 
 
 def compare_times(coins, amounts):
-    """Print the time for each method in milliseconds."""
-    functions = [
+    """Print a simple timing comparison in milliseconds."""
+    methods = [
         ("Recursive", coin_change_recursive),
         ("Memoized", lambda c, a: coin_change_memoized(c, a, {})),
         ("Bottom-up", coin_change_dp),
     ]
     for amount in amounts:
         print(f"\nAmount: {amount}")
-        for name, function in functions:
+        for name, function in methods:
             start = perf_counter()
             answer = function(coins, amount)
             elapsed_ms = (perf_counter() - start) * 1000
